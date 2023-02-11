@@ -21,6 +21,21 @@ namespace DyplomAPI.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("AdvertisementExpense", b =>
+                {
+                    b.Property<int>("AdvertisementsID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ExpensesID")
+                        .HasColumnType("int");
+
+                    b.HasKey("AdvertisementsID", "ExpensesID");
+
+                    b.HasIndex("ExpensesID");
+
+                    b.ToTable("AdvertisementExpense");
+                });
+
             modelBuilder.Entity("DyplomAPI.Models.Advertisement", b =>
                 {
                     b.Property<int>("ID")
@@ -33,9 +48,6 @@ namespace DyplomAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("ExpenseID")
-                        .HasColumnType("int");
-
                     b.Property<string>("Header")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -47,10 +59,12 @@ namespace DyplomAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("VolonteerID")
+                    b.Property<int>("VolonteerInfoID")
                         .HasColumnType("int");
 
                     b.HasKey("ID");
+
+                    b.HasIndex("VolonteerInfoID");
 
                     b.ToTable("Advertisements");
                 });
@@ -63,6 +77,9 @@ namespace DyplomAPI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
 
+                    b.Property<int>("Amount")
+                        .HasColumnType("int");
+
                     b.Property<int>("ExpenseNumber")
                         .HasColumnType("int");
 
@@ -70,10 +87,12 @@ namespace DyplomAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Volonteer_ID")
+                    b.Property<int>("VolonteerInfoID")
                         .HasColumnType("int");
 
                     b.HasKey("ID");
+
+                    b.HasIndex("VolonteerInfoID");
 
                     b.ToTable("Expenses");
                 });
@@ -110,10 +129,15 @@ namespace DyplomAPI.Migrations
                     b.Property<int>("OrganizationID")
                         .HasColumnType("int");
 
-                    b.Property<int>("VolonteerID")
+                    b.Property<int>("VolonteerInfoID")
                         .HasColumnType("int");
 
                     b.HasKey("ID");
+
+                    b.HasIndex("OrganizationID");
+
+                    b.HasIndex("VolonteerInfoID")
+                        .IsUnique();
 
                     b.ToTable("OrganizationMembers");
                 });
@@ -155,7 +179,98 @@ namespace DyplomAPI.Migrations
 
                     b.HasKey("ID");
 
+                    b.HasIndex("UserID")
+                        .IsUnique();
+
                     b.ToTable("VolonteerInfos");
+                });
+
+            modelBuilder.Entity("AdvertisementExpense", b =>
+                {
+                    b.HasOne("DyplomAPI.Models.Advertisement", null)
+                        .WithMany()
+                        .HasForeignKey("AdvertisementsID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DyplomAPI.Models.Expense", null)
+                        .WithMany()
+                        .HasForeignKey("ExpensesID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("DyplomAPI.Models.Advertisement", b =>
+                {
+                    b.HasOne("DyplomAPI.Models.VolonteerInfo", "VolonteerInfo")
+                        .WithMany("Advertisements")
+                        .HasForeignKey("VolonteerInfoID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("VolonteerInfo");
+                });
+
+            modelBuilder.Entity("DyplomAPI.Models.Expense", b =>
+                {
+                    b.HasOne("DyplomAPI.Models.VolonteerInfo", "VolonteerInfo")
+                        .WithMany("Expenses")
+                        .HasForeignKey("VolonteerInfoID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("VolonteerInfo");
+                });
+
+            modelBuilder.Entity("DyplomAPI.Models.OrganizationMember", b =>
+                {
+                    b.HasOne("DyplomAPI.Models.Organization", "Organization")
+                        .WithMany("OrganizationMember")
+                        .HasForeignKey("OrganizationID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DyplomAPI.Models.VolonteerInfo", "VolonteerInfo")
+                        .WithOne("OrganizationMember")
+                        .HasForeignKey("DyplomAPI.Models.OrganizationMember", "VolonteerInfoID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Organization");
+
+                    b.Navigation("VolonteerInfo");
+                });
+
+            modelBuilder.Entity("DyplomAPI.Models.VolonteerInfo", b =>
+                {
+                    b.HasOne("DyplomAPI.Models.User", "User")
+                        .WithOne("VolonteerInfo")
+                        .HasForeignKey("DyplomAPI.Models.VolonteerInfo", "UserID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("DyplomAPI.Models.Organization", b =>
+                {
+                    b.Navigation("OrganizationMember");
+                });
+
+            modelBuilder.Entity("DyplomAPI.Models.User", b =>
+                {
+                    b.Navigation("VolonteerInfo")
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("DyplomAPI.Models.VolonteerInfo", b =>
+                {
+                    b.Navigation("Advertisements");
+
+                    b.Navigation("Expenses");
+
+                    b.Navigation("OrganizationMember")
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

@@ -7,8 +7,10 @@ namespace DyplomAPI.Models
         [Key]
         public int ID { get; set; }
         
-        public int OrganizationID { get; set; }
+        public Organization Organization { get; set; }
         
-        public int VolonteerID { get; set; }
+        public int VolonteerInfoID { get; set; }
+        
+        public VolonteerInfo VolonteerInfo { get; set; }
     }
 }

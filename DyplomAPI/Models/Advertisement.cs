@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Dynamic;
 
@@ -16,8 +17,8 @@ namespace DyplomAPI.Models
 
         public int ImageID { get; set; }
 
-        public int ExpenseID { get; set; }
-
-        public int VolonteerID { get; set; }
+        public VolonteerInfo VolonteerInfo { get; set; }
+        
+        public List<Expense> Expenses { get; set; }
     }
 }

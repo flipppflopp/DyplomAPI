@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace DyplomAPI.Models
@@ -10,5 +11,7 @@ namespace DyplomAPI.Models
         public string Name { get; set; }
         
         public string Resource { get; set; }
+        
+        public List<OrganizationMember> OrganizationMember { get; set; }
     }
 }

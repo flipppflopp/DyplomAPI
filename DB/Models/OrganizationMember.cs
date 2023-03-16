@@ -1,16 +1,14 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace DyplomAPI.Models
+namespace DB.Models
 {
     public class OrganizationMember
     {
         [Key]
         public int ID { get; set; }
         
-        public Organization Organization { get; set; }
+        public int OrganizationID { get; set; }
         
         public int VolonteerInfoID { get; set; }
-        
-        public VolonteerInfo VolonteerInfo { get; set; }
     }
 }

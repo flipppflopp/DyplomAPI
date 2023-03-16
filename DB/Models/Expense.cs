@@ -1,8 +1,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Dynamic;
 
-namespace DyplomAPI.Models
+namespace DB.Models
 {
     public class Expense
     {
@@ -11,12 +10,8 @@ namespace DyplomAPI.Models
         
         public int Amount { get; set; }
         
-        public VolonteerInfo VolonteerInfo { get; set; }
+        public int VolonteerInfoID { get; set; }
         
-        public string Name { get; set; }
-        
-        public int ExpenseNumber { get; set; }
-        
-        public List<Advertisement> Advertisements { get; set; }
+        public string Name { get; set; } = null!;
     }
 }
